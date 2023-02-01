@@ -1,0 +1,1135 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "version" : "5.0.0",
+    "title" : "API UX MBOB Account Overview V5",
+    "description" : "Permite consultar las compañias y cuentas asociadas a una cliente."
+  },
+  "externalDocs" : {
+    "description" : "Para más información.",
+    "url" : "https://confluence.lima.bcp.com.pe/display/MBOBPUB/Api+MBOB+account+overview"
+  },
+  "servers" : [ {
+    "url" : "/channel/mbob/v5"
+  } ],
+  "x-bcp-api-type" : "UX",
+  "x-bcp-api-id" : "mbob-account-overview",
+  "paths" : {
+    "/companies" : {
+      "get" : {
+        "operationId" : "listCompanies",
+        "summary" : "Lista las empresas para un contrato seleccionado.",
+        "description" : "### Acerca de la funcionalidad expuesta\n\nLista las empresas para un contrato seleccionado, se aplicarán filtros si estos se envían en el queryparam\n\n***Query Param = CompanyQueryParam***\n\n### URI de acceso a la API\n| Método | URI\n|GET     | /channel/mbob/account-overview/v2/companies\n\n#### Usar la versión más reciente de la aplicación móvil\n\n#### Invocar previamente el API de validación de estado del dispositivo\n| Método | URI\n| GET    | /channel/mbob/landing/v1/validate |\n\n#### Headers Requeridos\n| Header | Ejemplo\n| Request-ID | 00341470-03f9-4e88-bbc8-20ce2d2a7bb9 |\n| request-date | 2020-04-04T12:01:53.688-0500 |\\r\\n| app-code | MK |\\r\\n| caller-name | patlalnxd01 |\\r\\n| Authorization | Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJQUzUxMiJ9.ew0KICAgICJpc3MiOiAiQ0FfR0FURVdBWSIsDQogICAgImV4cCI6IDQwNzQ2MTkxNjIsDQogICAgImludGVyY2VwdFVybE1hcCI6IFsNCiAgICAgICAgew0KICAgICAgICAgICAgInBhdHRlcm4iOiAiLyoqLyoqIg0KICAgICAgICB9DQogICAgXQ0KfQ.d-5RpaTu385xqPkLDJrnOapiTZYtSqTG9QG0S9XsnAz7o4IjaGr23MPYemnLT4KS0eqSwoD2wS90w-nlASiCAJrUOTshOGiYiYqZZABFM0JiW9RyqlJl-Fz3PmDUfAEyfA-IECim7eWcN8utFZj6r-f-Zp53iHpzP9uy9XykyJCsMaa3Hu7OSN9FiubkLtD0DjgzqdncK0m1MjpdJ6BMxT2CYBIA5Qj9mCezykbq__XX2X3d6-6J5rPffzq9uPJEtmFJKQdh80g3oaLcRMhFBWrkWe37mnBuIbUC7FAbqrmKXY7Bl75PdHqNUtzGps_fMuTmiDvI8ATrIBbJofrbEQ |\\r\\n| Content-Type | application/json |\\r\\n| Accept | application/json |\\r\\n| orig-device-id | eeee0f91-b777-4ae8-9f53-3e9ca1052ee6 |\\r\\n| app-version | 1.0.0 |\\r\\n| orig-device-platform | Android |\n\n### Código de errores del Servicio en esta versión de la API\n\n| Código | Descripcion |\\r\\n|--------|-------------|\\r\\n| TL0001 | Necesita actualizar su aplicación a la versión 1.0.0. |\\r\\n| TL0002 | Conflicto entre el recurso a actualizar y el que se encuentra en el sistema. |\\r\\n| TL0003 | Los datos proporcionados no son validos. |\\r\\n| TL0007 | Ocurrio un error en el servicio externo. |\\r\\n| TL0009 | Ocurrio un error intentando invocar servicios externos. Por favor contactarse con el Soporte Tecnico. |\\r\\n| TL0011 | No esta autorizado correctamente para ejecutar esta operacion. |\\r\\n\n\n### Precondiciones para el consumo de esta versión de la API\n  No aplica\n\n### Data de Prueba\n  No aplica\n\n### Usos válidos de Query Parameters\n  No aplica\n\n### Variantes válidas del Payload (Cuerpo del mensaje)\n  No aplica\n\n### Lista de Valores usadas en esta versión de la API\n  No aplica\n\n### Códigos de error usados en esta versión de la API\n  No aplica\n",
+        "tags" : [ "Company" ],
+        "x-atlas-header" : {
+          "$ref" : "#/components/schemas/AccountOverviewHeaders"
+        },
+        "x-atlas-query" : {
+          "$ref" : "#/components/schemas/CompaniesQuery"
+        },
+        "parameters" : [ {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Authorization"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Request-ID"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/app-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/caller-name"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/request-date"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/session-UID"
+        }, {
+          "$ref" : "#/components/parameters/orig-device-id"
+        }, {
+          "$ref" : "#/components/parameters/orig-device-platform"
+        }, {
+          "$ref" : "#/components/parameters/app-version"
+        }, {
+          "name" : "contractCode",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 6,
+            "minLength" : 6,
+            "pattern" : "^[a-zA-Z0-9]+$",
+            "type" : "string",
+            "description" : "Código del contrato que será aplicado para mostrar las compañias"
+          }
+        }, {
+          "name" : "search",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "description" : "Dato enviado para el filtro de empresa por descripción o número de documento"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Se muestran las empresas para un contrato.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CompanyResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Código de error de Sistema.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException400"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "No posee autorización para consultar el endpoint.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException401"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "Lista de compañias para realizar búsquedas esta vacía.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException412"
+                }
+              }
+            }
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500"
+          },
+          "503" : {
+            "description" : "El servicio no está disponible.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException503"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts" : {
+      "get" : {
+        "operationId" : "listAccounts",
+        "summary" : "Lista las cuentas de una empresa.",
+        "description" : "### Acerca de la funcionalidad expuesta\n  Se muestran las cuentas paginadas para una empresa, la empresa a consultar, los datos para la paginación y los filtros se envían por queryparam. Los filtros no son obligatorios para la consulta.\\r\\n\\r\\n***Header Request = HttpHeadersRequest***\n  ***Query Param = AccountQueryParam***\n### URI de acceso a la API\\r\\n| Método | URI |\\r\\n|--------|-------------|\\r\\n|GET| /channel/mbob/account-overview/v2/accounts |\\r\\n\\r\\n### Precondiciones para el consumo de esta versión de la API\n\n#### Usar la versión más reciente de la aplicación móvil\n\n#### Invocar previamente el API de validación de estado del dispositivo\n\n| Método | URI |\\r\\n|--------|-------------|\\r\\n|GET| /channel/mbob/landing/v1/validate |\n\n#### Headers Requeridos\\r\\n\\r\\n| Header    | Ejemplo |\\r\\n|-----------|-------|\\r\\n| Request-ID | 00341470-03f9-4e88-bbc8-20ce2d2a7bb9 |\\r\\n| request-date | 2020-04-04T12:01:53.688-0500 |\\r\\n| app-code | MK |\\r\\n| caller-name | patlalnxd01 |\\r\\n| Authorization | Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJQUzUxMiJ9.ew0KICAgICJpc3MiOiAiQ0FfR0FURVdBWSIsDQogICAgImV4cCI6IDQwNzQ2MTkxNjIsDQogICAgImludGVyY2VwdFVybE1hcCI6IFsNCiAgICAgICAgew0KICAgICAgICAgICAgInBhdHRlcm4iOiAiLyoqLyoqIg0KICAgICAgICB9DQogICAgXQ0KfQ.d-5RpaTu385xqPkLDJrnOapiTZYtSqTG9QG0S9XsnAz7o4IjaGr23MPYemnLT4KS0eqSwoD2wS90w-nlASiCAJrUOTshOGiYiYqZZABFM0JiW9RyqlJl-Fz3PmDUfAEyfA-IECim7eWcN8utFZj6r-f-Zp53iHpzP9uy9XykyJCsMaa3Hu7OSN9FiubkLtD0DjgzqdncK0m1MjpdJ6BMxT2CYBIA5Qj9mCezykbq__XX2X3d6-6J5rPffzq9uPJEtmFJKQdh80g3oaLcRMhFBWrkWe37mnBuIbUC7FAbqrmKXY7Bl75PdHqNUtzGps_fMuTmiDvI8ATrIBbJofrbEQ |\\r\\n| Content-Type | application/json |\\r\\n| Accept | application/json |\\r\\n| orig-device-id | eeee0f91-b777-4ae8-9f53-3e9ca1052ee6 |\\r\\n| app-version | 1.0.0 |\\r\\n| orig-device-platform | Android |\\r\\n\\r\\n### Código de errores del Servicio en esta versión de la API\\r\\n\\r\\n| Código | Descripcion |\\r\\n|--------|-------------|\\r\\n| TL0001 | Necesita actualizar su aplicación a la versión 1.0.0. |\\r\\n| TL0002 | Conflicto entre el recurso a actualizar y el que se encuentra en el sistema. |\\r\\n| TL0003 | Los datos proporcionados no son validos. |\\r\\n| TL0007 | Ocurrio un error en el servicio externo. |\\r\\n| TL0009 | Ocurrio un error intentando invocar servicios externos. Por favor contactarse con el Soporte Tecnico. |\\r\\n| TL0011 | No esta autorizado correctamente para ejecutar esta operacion.\n\n### Precondiciones para el consumo de esta versión de la API\n  No aplica\n\n### Data de Prueba\n  No aplica\n\n### Usos válidos de Query Parameters\n  No aplica\n\n### Variantes válidas del Payload (Cuerpo del mensaje)\n  No aplica\n\n### Lista de Valores usadas en esta versión de la API\n  No aplica\n\n### Códigos de error usados en esta versión de la API\n  No aplica\n",
+        "tags" : [ "Account" ],
+        "x-atlas-header" : {
+          "$ref" : "#/components/schemas/AccountOverviewHeaders"
+        },
+        "x-atlas-query" : {
+          "$ref" : "#/components/schemas/AccountOverviewQuery"
+        },
+        "parameters" : [ {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Authorization"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Request-ID"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/app-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/caller-name"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/request-date"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/session-UID"
+        }, {
+          "$ref" : "#/components/parameters/orig-device-id"
+        }, {
+          "$ref" : "#/components/parameters/orig-device-platform"
+        }, {
+          "$ref" : "#/components/parameters/app-version"
+        }, {
+          "name" : "companyCode",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 6,
+            "minLength" : 1,
+            "pattern" : "^\\d*$",
+            "type" : "string",
+            "description" : "Código de la Compañía para la que se buscarán las cuentas"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Número de página de cuentas a consultar",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Número de movimientos por página",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "currencyTypeCodes",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "Códigos de moneda para realizar el filtro = currencyTypeCodes=1001,0001",
+            "example" : "1001,0001",
+            "items" : {
+              "type" : "string",
+              "description" : "Códigos de moneda para realizar el filtro = currencyTypeCodes=1001,0001",
+              "example" : "1001,0001"
+            }
+          }
+        }, {
+          "name" : "accountTypeCodes",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "Códigos de tipo de cuenta para realizar el filtro = accountTypeCodes=C,A,M",
+            "example" : "C,A,M",
+            "items" : {
+              "type" : "string",
+              "description" : "Códigos de tipo de cuenta para realizar el filtro = accountTypeCodes=C,A,M",
+              "example" : "C,A,M"
+            }
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Se muestran las cuentas paginadas para una empresa.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400"
+          },
+          "401" : {
+            "description" : "No posee autorización para consultar el endpoint.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException401"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "El dispositivo que realiza la operación no está registrado en memoria.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException412"
+                }
+              }
+            }
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500"
+          },
+          "503" : {
+            "description" : "El servicio no está disponible.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException503"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}/movements" : {
+      "get" : {
+        "operationId" : "getMovements",
+        "summary" : "Lista los movimientos de una cuenta.",
+        "description" : "### Acerca de la funcionalidad expuesta\nSe muestran los movimientos paginados de una cuenta, los datos para la paginación y los filtros se envían por queryparam. Los filtros no son obligatorios para la consulta, salvo la paginacion para el historial de movimientos se debe enviar las fechas.\n\n***Header Request = HttpHeadersRequest***\n***Path Variable = accountId***\n***Query Param = MovementQueryParam***\n\n### URI de acceso a la API\n| Método | URI |\\r\\n|--------|-------------|\\r\\n|GET| /channel/mbob/account-overview/v2/accounts/{accountId}/movements |\\r\\n\\r\\n### Precondiciones para el consumo de esta versión de la API*\n#### Usar la versión más reciente de la aplicación móvil\n#### Invocar previamente el API de validación de estado del dispositivo\\r\\n\\r\\n| Método | URI |\\r\\n|--------|-------------|\\r\\n|GET| /channel/mbob/landing/v1/validate\n#### Headers Requeridos\\\n\n| Header    | Ejemplo |\\r\\n|-----------|-------|\\r\\n| Request-ID | 00341470-03f9-4e88-bbc8-20ce2d2a7bb9 |\\r\\n| request-date | 2020-04-04T12:01:53.688-0500 |\\r\\n| app-code | MK |\\r\\n| caller-name | patlalnxd01 |\\r\\n| Authorization | Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJQUzUxMiJ9.ew0KICAgICJpc3MiOiAiQ0FfR0FURVdBWSIsDQogICAgImV4cCI6IDQwNzQ2MTkxNjIsDQogICAgImludGVyY2VwdFVybE1hcCI6IFsNCiAgICAgICAgew0KICAgICAgICAgICAgInBhdHRlcm4iOiAiLyoqLyoqIg0KICAgICAgICB9DQogICAgXQ0KfQ.d-5RpaTu385xqPkLDJrnOapiTZYtSqTG9QG0S9XsnAz7o4IjaGr23MPYemnLT4KS0eqSwoD2wS90w-nlASiCAJrUOTshOGiYiYqZZABFM0JiW9RyqlJl-Fz3PmDUfAEyfA-IECim7eWcN8utFZj6r-f-Zp53iHpzP9uy9XykyJCsMaa3Hu7OSN9FiubkLtD0DjgzqdncK0m1MjpdJ6BMxT2CYBIA5Qj9mCezykbq__XX2X3d6-6J5rPffzq9uPJEtmFJKQdh80g3oaLcRMhFBWrkWe37mnBuIbUC7FAbqrmKXY7Bl75PdHqNUtzGps_fMuTmiDvI8ATrIBbJofrbEQ |\\r\\n| Content-Type | application/json |\\r\\n| Accept | application/json |\\r\\n| orig-device-id | eeee0f91-b777-4ae8-9f53-3e9ca1052ee6 |\\r\\n| app-version | 1.0.0 |\\r\\n| orig-device-platform | Android |\\r\\n\\r\\n### Código de errores del Servicio en esta versión de la API\\r\\n\\r\\n| Código | Descripcion |\\r\\n|--------|-------------|\\r\\n| TL0001 | Necesita actualizar su aplicación a la versión 1.0.0. |\\r\\n| TL0002 | Conflicto entre el recurso a actualizar y el que se encuentra en el sistema. |\\r\\n| TL0003 | Los datos proporcionados no son validos. |\\r\\n| TL0007 | Ocurrio un error en el servicio externo. |\\r\\n| TL0009 | Ocurrio un error intentando invocar servicios externos. Por favor contactarse con el Soporte Tecnico. |\\r\\n| TL0011 | No esta autorizado correctamente para ejecutar esta operacion.\n\n### Precondiciones para el consumo de esta versión de la API\n  No aplica\n\n### Data de Prueba\n  No aplica\n\n### Usos válidos de Query Parameters\n  No aplica\n\n### Variantes válidas del Payload (Cuerpo del mensaje)\n  No aplica\n\n### Lista de Valores usadas en esta versión de la API\n  No aplica\n\n### Códigos de error usados en esta versión de la API\n  No aplica\n",
+        "tags" : [ "Movement" ],
+        "x-atlas-header" : {
+          "$ref" : "#/components/schemas/AccountOverviewHeaders"
+        },
+        "x-atlas-query" : {
+          "$ref" : "#/components/schemas/MovementsQuery"
+        },
+        "parameters" : [ {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Authorization"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Request-ID"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/app-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/caller-name"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/request-date"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/session-UID"
+        }, {
+          "$ref" : "#/components/parameters/orig-device-id"
+        }, {
+          "$ref" : "#/components/parameters/orig-device-platform"
+        }, {
+          "$ref" : "#/components/parameters/app-version"
+        }, {
+          "name" : "accountId",
+          "in" : "path",
+          "description" : "Identificador en SHA256 del Número de cuenta",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "page",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Número de página de movimientos a consultar",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "pageSize",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "minimum" : 1,
+            "type" : "integer",
+            "description" : "Número de movimientos por página",
+            "format" : "int32"
+          }
+        }, {
+          "name" : "movementTypes",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "array",
+            "description" : "Tipo de movimientos para realizar la búsqueda de movimientos históricos (001 = Abono por servicio de recaudación , 002 = Cheques devueltos, 003 = Depósitos en efectivo, 004 = Entrega de cheques, 005 = Cheques pagados, 006 = Cargos, 007 = Abonos, 999 = Otros )",
+            "example" : "001,002,999",
+            "items" : {
+              "type" : "string",
+              "description" : "Tipo de movimientos para realizar la búsqueda de movimientos históricos ( 001 = Abono por servicio de recaudación , 002 = Cheques devueltos, 003 = Depósitos en efectivo, 004 = Entrega de cheques, 005 = Cheques pagados, 006 = Cargos, 007 = Abonos, 999 =  Otros )",
+              "example" : "001,002,999"
+            }
+          }
+        }, {
+          "name" : "startDateSearch",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(.[0-9]+)?(Z)?$",
+            "type" : "string",
+            "description" : "Fecha de inicio para la búsqueda de movimientos históricos",
+            "example" : "2019-02-11T10:08:23 | 2019-06-15T11:11:35"
+          }
+        }, {
+          "name" : "endDateSearch",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^(-?(?:[1-9][0-9]*)?[0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9])(.[0-9]+)?(Z)?$",
+            "type" : "string",
+            "description" : "Fecha final para la búsqueda de movimientos históricos",
+            "example" : "2019-03-23T22:22:20 | 2019-09-11T23:01:58"
+          }
+        }, {
+          "name" : "accountTypeCode",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "description" : "Tipo de cuenta; C=cuenta corriente, A=ahorro, M=maestra",
+            "example" : "C"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Lista movimientos paginados para una cuenta.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MovementResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/400"
+          },
+          "401" : {
+            "description" : "No posee autorización para consultar el endpoint.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException401"
+                }
+              }
+            }
+          },
+          "412" : {
+            "description" : "El dispositivo que realiza la operación no está registrado en memoria.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException412"
+                }
+              }
+            }
+          },
+          "500" : {
+            "$ref" : "#/components/responses/500"
+          },
+          "503" : {
+            "description" : "El servicio no está disponible.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApiException503"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "parameters" : {
+      "app-version" : {
+        "name" : "app-version",
+        "in" : "header",
+        "required" : true,
+        "schema" : {
+          "type" : "string",
+          "example" : "app",
+          "pattern" : "(^(\\d+\\.)(\\d+\\.)(\\d+$))|(^(\\d+\\.)(\\d+$))"
+        }
+      },
+      "orig-device-platform" : {
+        "name" : "orig-device-platform",
+        "in" : "header",
+        "required" : true,
+        "schema" : {
+          "pattern" : "^[a-zA-Z]*$",
+          "type" : "string",
+          "example" : "app",
+          "maxLength" : 50
+        }
+      },
+      "orig-device-id" : {
+        "name" : "orig-device-id",
+        "in" : "header",
+        "description" : "Código identificador del dispositivo.",
+        "required" : true,
+        "examples" : {
+          "android" : {
+            "summary" : "Android",
+            "value" : "9c7d1983-4261-4627-87a0-32ea644a5855"
+          },
+          "iOS" : {
+            "summary" : "iOS",
+            "value" : "E529CDA9-AB84-4C63-B2CC-64EEB7736C1E"
+          }
+        },
+        "schema" : {
+          "pattern" : "^([0-9a-fA-F]{8}(\\-[0-9a-fA-F]{4}){3}\\-[0-9a-fA-F]{12}|[0-9a-fA-F]{16})$",
+          "type" : "string",
+          "example" : "eeee0f91-b777-4ae8-9f53-3e9ca1052ee6",
+          "maxLength" : 50
+        }
+      }
+    },
+    "schemas" : {
+      "CompaniesQuery" : {
+        "type" : "object"
+      },
+      "AccountOverviewQuery" : {
+        "type" : "object"
+      },
+      "MovementsQuery" : {
+        "type" : "object"
+      },
+      "AccountOverviewHeaders" : {
+        "type" : "object"
+      },
+      "ApiException401" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error de Sistema",
+            "example" : "TL0002"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del error de Sistema",
+            "example" : "No tiene autorización para acceder al recurso."
+          },
+          "errorType" : {
+            "type" : "string",
+            "description" : "Tipo de Error de Sistema",
+            "example" : "TECHNICAL"
+          },
+          "exceptionDetails" : {
+            "type" : "array",
+            "description" : "Lista de detalles del error",
+            "items" : {
+              "$ref" : "#/components/schemas/ApiExceptionDetail401"
+            }
+          },
+          "value" : {
+            "$ref" : "#/components/schemas/Properties401"
+          }
+        },
+        "description" : "Datos del error de sistema."
+      },
+      "ApiExceptionDetail401" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error del Detalle/Proveedor",
+            "example" : "MK001"
+          },
+          "component" : {
+            "type" : "string",
+            "description" : "Nombre del componente de falla",
+            "example" : "MK.AccountOverview"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del Detalle",
+            "example" : "Autenticación fallida"
+          }
+        },
+        "description" : "Datos del error t&eacute;cnico."
+      },
+      "Properties401" : {
+        "type" : "object",
+        "properties" : {
+          "properties" : {
+            "$ref" : "#/components/schemas/PropertiesValue401"
+          }
+        },
+        "description" : "Lista de propiedades especiales."
+      },
+      "PropertiesValue401" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "Título",
+            "example" : "Autenticación fallida"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "Etiqueta",
+            "example" : "MSG_UNAUTHORIZED"
+          }
+        },
+        "description" : "Lista de propiedades especiales.",
+        "example" : "Autenticación fallida"
+      },
+      "ApiException400" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error de Sistema",
+            "example" : "TL0001"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del error de Sistema",
+            "example" : "Los datos proporcionados en la solicitud no son válidos."
+          },
+          "errorType" : {
+            "type" : "string",
+            "description" : "Tipo de Error de Sistema",
+            "example" : "TECHNICAL"
+          },
+          "exceptionDetails" : {
+            "type" : "array",
+            "description" : "Lista de detalles del error",
+            "items" : {
+              "$ref" : "#/components/schemas/ApiExceptionDetail400"
+            }
+          },
+          "value" : {
+            "$ref" : "#/components/schemas/ApiException400"
+          }
+        },
+        "description" : "Datos del error de sistema."
+      },
+      "ApiExceptionDetail400" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error del Detalle/Proveedor",
+            "example" : "MK001"
+          },
+          "component" : {
+            "type" : "string",
+            "description" : "Nombre del componente de falla",
+            "example" : "MK.AccountOverview"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del Detalle",
+            "example" : "No es un parámetro válido"
+          }
+        },
+        "description" : "Datos del error técnico."
+      },
+      "ApiException412" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error de Sistema",
+            "example" : "TL0004"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del error de Sistema",
+            "example" : "El dispositivo que realiza la operación no esta registrado."
+          },
+          "errorType" : {
+            "type" : "string",
+            "description" : "Tipo de Error de Sistema",
+            "example" : "TECHNICAL"
+          },
+          "exceptionDetails" : {
+            "type" : "array",
+            "description" : "Lista de detalles del error",
+            "items" : {
+              "$ref" : "#/components/schemas/ApiExceptionDetail412"
+            }
+          },
+          "value" : {
+            "$ref" : "#/components/schemas/Properties412"
+          }
+        },
+        "description" : "Datos del error de sistema."
+      },
+      "ApiExceptionDetail412" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error del Detalle/Proveedor",
+            "example" : "MK001"
+          },
+          "component" : {
+            "type" : "string",
+            "description" : "Nombre del componente de falla",
+            "example" : "MK.AccountOverview"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del Detalle",
+            "example" : "Dispositivo no registrado"
+          }
+        },
+        "description" : "Datos del error t&eacute;cnico."
+      },
+      "Properties412" : {
+        "type" : "object",
+        "properties" : {
+          "properties" : {
+            "$ref" : "#/components/schemas/PropertiesValue412"
+          }
+        },
+        "description" : "Lista de propiedades especiales."
+      },
+      "PropertiesValue412" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "Título",
+            "example" : "Dispositivo no registrado"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "Etiqueta",
+            "example" : "MSG_UNREGISTERED_DEVICE"
+          }
+        },
+        "description" : "Lista de propiedades especiales.",
+        "example" : "Dispositivo no registrado"
+      },
+      "Company" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "integer",
+            "description" : "Código de la empresa",
+            "format" : "int32"
+          },
+          "companyName" : {
+            "type" : "string",
+            "description" : "Descripción de la empresa",
+            "example" : "CENTRO AUTOMOTRIZ S.A. | FUNDICION QUINTEROS E.I.R.L"
+          },
+          "documentNumber" : {
+            "type" : "string",
+            "description" : "Número del tipo de documento",
+            "example" : 45939188
+          },
+          "documentType" : {
+            "type" : "string",
+            "description" : "Código del tipo de documento",
+            "example" : "DNI | RUC"
+          }
+        },
+        "description" : "Empresas del contrato"
+      },
+      "CompanyResponse" : {
+        "type" : "object",
+        "properties" : {
+          "companies" : {
+            "type" : "array",
+            "description" : "Empresas del contrato",
+            "items" : {
+              "$ref" : "#/components/schemas/Company"
+            }
+          }
+        }
+      },
+      "ApiException503" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error de Sistema",
+            "example" : "TL0006"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del error de Sistema",
+            "example" : "El servicio no se encuentra disponible."
+          },
+          "errorType" : {
+            "type" : "string",
+            "description" : "Tipo de Error de Sistema",
+            "example" : "TECHNICAL"
+          },
+          "exceptionDetails" : {
+            "type" : "array",
+            "description" : "Lista de detalles del error",
+            "items" : {
+              "$ref" : "#/components/schemas/ApiExceptionDetail503"
+            }
+          },
+          "value" : {
+            "$ref" : "#/components/schemas/Properties503"
+          }
+        },
+        "description" : "Datos del error de sistema."
+      },
+      "ApiExceptionDetail503" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error del Detalle/Proveedor",
+            "example" : "MK001"
+          },
+          "component" : {
+            "type" : "string",
+            "description" : "Nombre del componente de falla",
+            "example" : "MK.AccountOverview"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del Detalle",
+            "example" : "Servicio no disponible"
+          }
+        },
+        "description" : "Datos del error t&eacute;cnico."
+      },
+      "Properties503" : {
+        "type" : "object",
+        "properties" : {
+          "properties" : {
+            "$ref" : "#/components/schemas/PropertiesValue503"
+          }
+        },
+        "description" : "Lista de propiedades especiales."
+      },
+      "PropertiesValue503" : {
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "Título",
+            "example" : "Servicio no disponible"
+          },
+          "tag" : {
+            "type" : "string",
+            "description" : "Etiqueta",
+            "example" : "MSG_UNAVAILABLE_SERVICE"
+          }
+        },
+        "description" : "Lista de propiedades especiales.",
+        "example" : "Servicio no disponible"
+      },
+      "Account" : {
+        "required" : [ "amount" ],
+        "type" : "object",
+        "properties" : {
+          "number" : {
+            "type" : "string",
+            "description" : "Número de cuenta",
+            "example" : "1930781496097 | 1930781496050"
+          },
+          "formatNumber" : {
+            "type" : "string",
+            "description" : "Número de cuenta formateada",
+            "example" : "193-0781496-0-97"
+          },
+          "amount" : {
+            "$ref" : "#/components/schemas/Amount"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/AccountType"
+          }
+        },
+        "description" : "Cuentas de la empresa"
+      },
+      "AccountPagination" : {
+        "type" : "object",
+        "properties" : {
+          "summaryBalances" : {
+            "type" : "array",
+            "description" : "Saldos por tipo de moneda",
+            "items" : {
+              "$ref" : "#/components/schemas/SummaryBalance"
+            }
+          },
+          "count" : {
+            "type" : "integer",
+            "description" : "Total de páginas para las cuentas",
+            "format" : "int32"
+          },
+          "page" : {
+            "type" : "integer",
+            "description" : "página actual",
+            "format" : "int32"
+          },
+          "totalItems" : {
+            "type" : "integer",
+            "description" : "Total de items que contiene el producto",
+            "format" : "int32"
+          },
+          "accounts" : {
+            "type" : "array",
+            "description" : "Cuentas de la empresa",
+            "items" : {
+              "$ref" : "#/components/schemas/Account"
+            }
+          },
+          "title" : {
+            "type" : "string",
+            "description" : "Titulo",
+            "example" : "Tiulo general"
+          }
+        },
+        "description" : "Saldo total y paginación de las cuentas"
+      },
+      "AccountResponse" : {
+        "type" : "object",
+        "properties" : {
+          "account" : {
+            "$ref" : "#/components/schemas/AccountPagination"
+          }
+        }
+      },
+      "AccountType" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código del tipo de cuenta",
+            "example" : "C | A | M"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripción del tipo de cuenta",
+            "example" : "Cuenta Corriente | Cuenta Ahorros | Cuenta Maestra"
+          }
+        },
+        "description" : "Tipo y descripcion de las cuentas"
+      },
+      "Amount" : {
+        "required" : [ "balance", "contableBalance", "currencySymbol" ],
+        "type" : "object",
+        "properties" : {
+          "currencySymbol" : {
+            "type" : "string",
+            "description" : "Símbolo del tipo de moneda",
+            "example" : "S/ | $"
+          },
+          "balance" : {
+            "type" : "number",
+            "description" : "Cantidad del saldo"
+          },
+          "contableBalance" : {
+            "type" : "number",
+            "description" : "Cantidad de saldo contable"
+          }
+        },
+        "description" : "Saldos y moneda de la cuenta"
+      },
+      "SummaryBalance" : {
+        "required" : [ "amount", "currencySymbol", "title" ],
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "Título del resumen del saldo",
+            "example" : "Total Soles | Total Dólares"
+          },
+          "currencySymbol" : {
+            "type" : "string",
+            "description" : "Símbolo de la moneda del resumen del saldo",
+            "example" : "S/ | $"
+          },
+          "amount" : {
+            "type" : "number",
+            "description" : "Total del saldo"
+          }
+        },
+        "description" : "Saldos por tipo de moneda"
+      },
+      "Movement" : {
+        "required" : [ "month", "transactions" ],
+        "type" : "object",
+        "properties" : {
+          "month" : {
+            "type" : "string",
+            "description" : "Mes donde se realizaron los movimientos",
+            "example" : "Marzo 2020"
+          },
+          "transactions" : {
+            "type" : "array",
+            "description" : "Movimientos por mes",
+            "items" : {
+              "$ref" : "#/components/schemas/MovementTransactions"
+            }
+          }
+        },
+        "description" : "Movimientos de una cuenta"
+      },
+      "MovementPagination" : {
+        "required" : [ "count", "page", "title", "totalItems" ],
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "description" : "Título del tipo de información devuelta",
+            "example" : "Últimos 20 movimientos"
+          },
+          "movements" : {
+            "type" : "array",
+            "description" : "Movimientos de una cuenta",
+            "items" : {
+              "$ref" : "#/components/schemas/Movement"
+            }
+          },
+          "page" : {
+            "type" : "integer",
+            "description" : "Página actual",
+            "format" : "int32",
+            "example" : 1
+          },
+          "count" : {
+            "type" : "integer",
+            "description" : "Total de páginas",
+            "format" : "int32",
+            "example" : 12
+          },
+          "totalItems" : {
+            "type" : "integer",
+            "description" : "Total de items",
+            "format" : "int32",
+            "example" : 120
+          }
+        },
+        "description" : "Saldo total y paginación de los movimientos"
+      },
+      "MovementResponse" : {
+        "type" : "object",
+        "properties" : {
+          "movement" : {
+            "$ref" : "#/components/schemas/MovementPagination"
+          }
+        }
+      },
+      "MovementTransactions" : {
+        "required" : [ "amount", "branchOfficeCode", "date", "operationNumber" ],
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "number",
+            "description" : "Monto de la transacción",
+            "example" : 105.56
+          },
+          "date" : {
+            "type" : "string",
+            "description" : "Fecha de la transacción",
+            "example" : "2017-07-21T17:32:28.000Z"
+          },
+          "valutaDate" : {
+            "type" : "string",
+            "description" : "Fecha de valuta de la transacción",
+            "example" : "2017-07-21T17:32:28.000Z"
+          },
+          "reference" : {
+            "type" : "string",
+            "description" : "Referencia de la transacción",
+            "example" : "Centro Automotriz SAC"
+          },
+          "operationNumber" : {
+            "type" : "string",
+            "description" : "Número de operación de la transacción",
+            "example" : 92849
+          },
+          "branchOfficeCode" : {
+            "type" : "string",
+            "description" : "Código de la sucursal-agencia",
+            "example" : "193-078"
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "Código de usuario",
+            "example" : "ITTL"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/MovementType"
+          }
+        },
+        "description" : "Movimientos por mes"
+      },
+      "MovementType" : {
+        "required" : [ "code", "description" ],
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código del tipo de transacción",
+            "example" : 2
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripción del tipo de transacción",
+            "example" : "Entrega de cheques"
+          }
+        }
+      },
+      "ApiException" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error de Sistema",
+            "example" : "TL0001"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del error de Sistema",
+            "example" : "Error al llamar al servicio"
+          },
+          "errorType" : {
+            "type" : "string",
+            "description" : "Tipo de Error de Sistema",
+            "example" : "TECHNICAL"
+          },
+          "exceptionDetails" : {
+            "type" : "array",
+            "description" : "Lista de detalles del error",
+            "items" : {
+              "$ref" : "#/components/schemas/ApiExceptionDetail"
+            }
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object",
+              "description" : "Lista de propiedades especiales."
+            },
+            "description" : "Lista de propiedades especiales."
+          }
+        },
+        "description" : "Datos del error de sistema."
+      },
+      "ApiExceptionDetail" : {
+        "type" : "object",
+        "properties" : {
+          "code" : {
+            "type" : "string",
+            "description" : "Código de error del Detalle/Proveedor",
+            "example" : "MB0008"
+          },
+          "component" : {
+            "type" : "string",
+            "description" : "Nombre del componente de falla",
+            "example" : "MB.CardInqV2"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripcion del Detalle",
+            "example" : "Código invalido para el canal"
+          }
+        },
+        "description" : "Datos del error t&eacute;cnico."
+      }
+    },
+    "responses" : {
+      "400" : {
+        "description" : "Invalid arguments",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ApiException"
+            }
+          }
+        }
+      },
+      "500" : {
+        "description" : "Internal server error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ApiException"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,847 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "API BS Account V4",
+    "description" : "Permite obtener la información de cuentas de ahorro, CTS, corriente, depósito a plazo, CBME, CBME Especial, maestra para personas y empresas. Asi como, afiliar relación de celular-cuenta del cliente.",
+    "version" : "4.3.0"
+  },
+  "externalDocs" : {
+    "description" : "Para mas información de la API BS Accounts V4",
+    "url" : "https://confluence.lima.bcp.com.pe/display/APSYPUB/Accounts+v4"
+  },
+  "servers" : [ {
+    "url" : "/loans-deposits/account/v4"
+  } ],
+  "x-bcp-api-type" : "BS",
+  "x-bcp-api-id" : "account",
+  "tags" : [ {
+    "name" : "Account",
+    "description" : "Account Controller"
+  } ],
+  "paths" : {
+    "/accounts/{accountId}" : {
+      "get" : {
+        "tags" : [ "Account" ],
+        "summary" : "Consulta el detalle de una Cuenta.",
+        "description" : "### Acerca de la funcionalidad expuesta\n\nConsulta la información de cuentas de ahorro, CTS, corriente, depósito a plazo, CBME, CBME Especial, maestra para personas y empresas (Incluye los saldos).\n\n## Path parameter = {accountId}\n\n### Data de Prueba\n\n### Desarollo \n\n| accountId            |\n|----------------------|\n| 00001910680905026004 |\n| 00001910045468071004 |\n| 00019100001008018005 |\n| 00024505044679061005 |\n| 00001918002545207006 |\n| 00002158500301615006 |\n| 00001918012882109006 |\n| 00001910000001010007 |\n| 00001910087212110008 |\n| 00019140000001014009 |\n  \n### Certificación\n  \n| accountId            |\n|----------------------|\n| 00001910680905026004 |\n| 00001931356027151004 |\n| 00001910045468071004 |\n| 00019211302741009005 |\n| 00019418091499140005 |\n| 00019318085994179005 |\n| 00001918002545207006 |\n| 00002158500301615006 |\n| 00001918012882109006 |\n| 00001910000001010007 |\n| 00001911555025022007 |\n| 00001931448548096007 |\n| 00001910087212118008 |\n| 00019140000001014009 |\n\n\n### Precondiciones para el consumo de esta versión de la API\n\nPara el consumo de la  API, se debe elaborar los siguientes formatos:\n ### 1. Configuraci&oacute;n por &Uacute;NICA VEZ POR C&Oacute;DIGO DE CANAL\n \n 1.1. Solicitar agregar el rol invoque ZCEE al usuario de aplicaci&oacute;\nconsumidor en RACF, este rol permite al usuario poder consumir interfaces ZCEE.\n El Rol se asigna al usuario dependiendo del ambiente.\n - Desarrollo -> GZCINVDS\n - Certificación -> GZCINVCR\n - Producción -> GZCINVPR\n Nota. El usuario de aplicaci&oacute;n de Certificaci&oacute;n debe de tener\n permisos para consumir interfaces ZOSCEE en Desarrollo, esto por restricciones\n de RACF Desarrollo/Certificaci&oacute;n.\n Ejemplos de solicitud:\n - Otorgar Rol invoque (GZCINVDS, GZCINVCR) interfaces ZCEE de Desarrollo y\n Certificaci&oacute;n al usuario de aplicaci&oacute;n RACF de Mobile Banking\n APMBCER.\n - Otorgar Rol invoque (GZCINVDS) interfaces ZCEE de Desarrollo a usuario de\n aplicaci&oacute;n RACF de Mobile Banking APMBDES\n \n 1.2. Solicitar delegar la identidad del usuario de aplicaci&oacute;n consumidor\n entre el Distribuido (campo AppCode de JWT) y Mainframe (Usuario aplicaci&oacute;\n RACF) a trav&eacute;s de comando RACMAP.\n | Ejecutar Comando|\n |----------------|\n | racmap id(APXXYYY) map userdidfilter(name(?XX')) REGISTRY(NAME('*')) WITHLABEL(?Nombre Consumidor?)|\n |SETROPTS RACLIST(IDIDMAP) REFRESH|\n Donde: \n - XX: C&oacute;digo de aplicaci&oacute;n (2) del consumidor\n - YYY: Ambiente (DES/CER/PRO)\n |Ejemplo|\n |--------|\n |racmap id(APBMCER) map userdidfilter(name('BM')) REGISTRY(NAME('*')) WITHLABEL('Banca Movil?)|\n |SETROPTS RACLIST(IDIDMAP) REFRESH|\n \n ### 2. Formato FAE\n Registrar en Rutinas Generales el c&oacute;digo de la aplicaci&oacute;n de 2 d&iacute;gitos que consumir&aacute; la interfaz STDA, IMDS.\n ### 3. Formato FCI\n ### STDA\n Crear el c&oacute;digo Mirror Transaction XY0O, donde XY es el c&oacute;digo\n de la aplicaci&oacute;n consumidora de 2 d&iacute;gitos.\n CICS AOR - Validar con equipo owner plataforma ZCEE\n - Desarrollo -> AZ5*CICS\n - Certificación -> AZ7*CICS\n - Producción -> AZ2*CICS\n CICS TOR\n - Desarrollo -> A054CICS\n - Certificación -> A073CICS / A074CICS\n - Producción -> A02WCICS / A02XCICS / A02YCICS / A02ZCICS\n ### IMDS\n Crear el c&oacute;digo Mirror Transaction XY0P, donde XY es el c&oacute;digo\n de la aplicaci&oacute;n consumidora de 2 d&iacute;gitos.\n CICS AOR - Validar con equipo owner plataforma ZCEE\n - Desarrollo -> AZ5*CICS\n - Certificación -> AZ7*CICS\n - Producción -> AZ2*CICS\n CICS TOR\n - Desarrollo -> A054CICS\n - Certificación -> A073CICS / A074CICS\n - Producción -> A02WCICS / A02XCICS / A02YCICS / A02ZCICS\n ### Creaci&oacute;n y permisos MirrorTX\n ### 3.1. Protecci&oacute;n de Transacciones (Responsable: Seguridad de aplicaciones)\n Todo mirror transaction creado debe de estar protegido en los ambientes de\n Certificaci&oacute;n y Producci&oacute;n. Esto se define en un formato FCI a\n trav&eacute;s de un ticket de cambio (MVP o RLM).\n Usar FCI como referencia ZCEE -> **https://jira.lima.bcp.com.pe/browse/MVPBCP-4437** \n ### 3.2. Creaci&oacute;n de Transacciones (Responsable: IBM MAINFRAME SERVER)\n Se debe de definir las transacciones en los CICS TOR(Terminal) y en los CIS AOR\n (Canal o Core).\n Usar FCI como referencia ZCEE -> **https://jira.lima.bcp.com.pe/browse/MVPBCP-4437** \n ### 3.3. Otorgar permisos sobre las Transacciones (Responsable: Seguridad de aplicaciones)\n Se debe de solicitar permisos de READ al usuario de aplicaci&oacute;n RACF consumidor\n sobre las transacciones creadas en el FCI. Los permisos solo se solicitan en\n Certificaci&oacute;n y Producci&oacute;n\n Usar MVP como referencia -> **https://jira.lima.bcp.com.pe/browse/MVPBCP-4437** \n \n ### 4. Configuraci&oacute;n de Atlas Security\n  |Backend | M&eacute;todo | URI |\n  |----|-----|-----|\n  | STDA |POST| /syst/stda/v1.0.0|\n  | IMDS |POST| /syst/imds/v1.0.0|\n  | API |GET| /loans-deposits/account/v4/accounts/{accountId}|\n  \n ### 5. Integraci&oacute;n con Lynx - No Monetario (Monitoreo de riesgos)\n El canal deber&aacute; considerar enviar dos headers (ambos obligatorios), se detalla:\n |  Header | Ejemplo |\n | --------|---------|\n | risk-analize-online| ewogICAgImV2ZW50SWQiOiIyMjIyIiwKICAgICJyZXF1ZXN0SWQiOiAiMTExMSIKICAgICJldGMiOiAiZXRjIgp9 |\n \n ### Información complementaria\n \n ***“[[GET] Obtiene el detalle de una cuenta](https://confluence.lima.bcp.com.pe/x/V_sQIQ)”*** \n\n\n### Query Parameters v&aacute;lidos en esta versi&oacute;n de la API\n\nNo Aplica\n\n### Usos válidos de Query Parameters\n\nNo Aplica\n\n### Variantes válidas del Payload (Cuerpo del mensaje)\n\nNo Aplica.\n\n### Lista de Valores usadas en esta versión de la API\n\nLos catálogos revisarlo en el siguiente link ***“[Catalogo de Valores -\nAccount V4](https://confluence.lima.bcp.com.pe/display/APSYPUB/%5BGET%5D+Obtiene+el+detalle+de+una+cuenta+%28Incluye+los+saldos%29+-+V4)”***\n<br/>\n\n| Atributo | Valor |\n|----------|----------|\n| accounts.productDetail.currency | Valores: USD, PEN |\n| accounts.productDetail.family | Valores: 000, 001, 003 |\n| accounts.productDetail.tioaux | Ver Catalogo de TIO-AUX. Ejemplo: CTEORD, AHOAHO, DEPPLZ, DEPCTO|\n| accounts.employeeAccountType | Valores: 0, 1, 3, 5 |\n| accounts.status | Valores: 00, 01, 02, 03, 04, 05, 06, 07, 08 |\n| accounts.accountBalances.balanceType | Valores: PromedioMes, Disponible, Contable, PagoHaberes, ContableProyectado, Flotante, InicioMes, DisponibleMasSobregiro, Cierre, CongeladoCTS |\n| accounts.renovationType | Valores: 0, 1, 2, 3, 4, 5 |\n| accounts.accountClassifications[0].type | Valores Cuenta de Ahorros: Espacio, CERBCP, LIBBCP, PRICTA, CCERO, MOVIL Valores Cuenta Corriente: 010, 011, ..., 088, 089 |\n| accounts.accountClassifications[1].type | Valores Cuenta de Ahorros: 150, 151, 155, 160, 200, 201, 202, 203, 204, 211, 212, 213, 250, 320, 400 Valores Cuenta Corriente: 100, 200, 300, 900 |\n| accounts.accountClassifications[2].type | Valores: 101, 102, 103, 104, 105, 106, 107, 201, 202, 203, 601, 602, Y, O, Espacios |\n| accounts.fraudInsuranceType | Valores: 0, 1, 2, 3, 7 |\n| accounts.interestPayment.paymentType | Valores: 0, 1, 5 |\n| accounts.interestPayment.paymentTarget | Valores: 0, 1 |\n| accounts.principalPayment.paymentForm | Valores: 0, 1, 2, 3 |\n| accounts.principalPayment.disbursementProduct.family | Valores: ST, IM | \n\n\n### Códigos de error usados en esta versión de la API\n| C&oacute;digo | Descripci&oacute;n |\n|--------|-------------|\n| TL0003 | Los datos proporcionados no son validos. |\n| TL0004 | El servicio no se encuentra disponible. Por favor reintente mas tarde. |\n| TL0005 | No se encontro el servidor solicitado. |\n| TL0007 | Ocurrio un error en el servicio externo. |\n| TL0009 | Ocurrio un error intentando invocar servicios externos. Por favor contactarse con el Soporte Tecnico. |\n| TL0011 | No esta autorizado correctamente para ejecutar esta operacion. |\n| TL9999 | Ocurrio un error inesperado. Por favor contactarse con el Soporte Tecnico. |\n",
+        "operationId" : "search",
+        "x-atlas-header" : {
+          "$ref" : "#/components/schemas/AccountHeaders"
+        },
+        "parameters" : [ {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/Authorization"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/Request-ID"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/request-date"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/app-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/caller-name"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/Ocp-Apim-Subscription-Key"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/user-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/supervisor-code"
+        }, {
+          "$ref" : "#/components/parameters/org-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/server-terminal"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/server-app"
+        }, {
+          "name" : "branch-office-code",
+          "in" : "header",
+          "description" : "Codigo de sucursal en la que se realiza la operacion tanto fisica como virtual (Ej. 193)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\d",
+            "type" : "string",
+            "maxLength" : 3,
+            "example" : "193"
+          }
+        }, {
+          "name" : "agency-code",
+          "in" : "header",
+          "description" : "Codigo de la agencia (Ej. 001)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\d",
+            "type" : "string",
+            "maxLength" : 3,
+            "example" : "001"
+          }
+        }, {
+          "name" : "app-name",
+          "in" : "header",
+          "description" : "Nombre descriptivo de la aplicacion. (Ej. BM)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[a-zA-Z0-9]+$",
+            "type" : "string",
+            "maxLength" : 15,
+            "example" : "BM"
+          }
+        }, {
+          "name" : "opn-code",
+          "in" : "header",
+          "description" : "Identificador de la operacion de negocio, esta ligado al usuario. (Ej. 12345678)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\d+",
+            "type" : "string",
+            "maxLength" : 50,
+            "example" : "12345678"
+          }
+        }, {
+          "name" : "opn-number",
+          "in" : "header",
+          "description" : "Numero de Operacion: Identificador que representa una operacion. Este dato es generado por canal y consta de 8 digitos. (Ej. 12345678)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\d+",
+            "type" : "string",
+            "maxLength" : 8,
+            "example" : "12345678"
+          }
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/opn-reverse-number"
+        }, {
+          "name" : "client-code",
+          "in" : "header",
+          "description" : "Identificador de Canal: Canal configurado del cual se almacenara la auditoria. (Ej. BM)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^([A-Z0-9]+)$",
+            "type" : "string",
+            "maxLength" : 10,
+            "example" : "BM"
+          }
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/cust-doc-number"
+        }, {
+          "name" : "guild-client",
+          "in" : "header",
+          "description" : "Indica si es cliente Gremio o no. S = Si, N = No  (Ej. XXX).",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^(S|N)$",
+            "type" : "string"
+          }
+        }, {
+          "name" : "authserver",
+          "in" : "header",
+          "description" : "Indica el Tipo de Token que envía el Servicio Api Management (Ej. XXX).",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "risk-analize-online",
+          "in" : "header",
+          "description" : "Información enviada desde el canal para Lynx (Ej. XXX).",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "Cache-Control",
+          "in" : "header",
+          "description" : "Cache enviada desde el canal (Ej. XXX).",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : "no-cache, no-store, must-revalidate"
+          }
+        }, {
+          "name" : "accountId",
+          "in" : "path",
+          "description" : "Numero de producto (cuenta) a consultar (Ej. XXX).",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 20,
+            "minLength" : 20,
+            "pattern" : "\\d+",
+            "type" : "string"
+          },
+          "example" : 1.9100109502007004E16
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "La peticion se proceso correctamente.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountSearchResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "El cliente envi&oacute; datos incorrectos.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No se encontr&oacute; el recurso solicitado.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error al intentar actualizar el recurso.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "El servicio no se encontra disponible.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts" : {
+      "get" : {
+        "tags" : [ "Account" ],
+        "summary" : "Obtiene la informaci&oacute;n de una Lista de Cuentas.",
+        "description" : "### Acerca de la funcionalidad expuesta\n\nPermite obtener informaci&oacute;n general y saldos de Cuenta Corriente, Maestra, Ahorros, CTS, CBME y Plazo pertenecientes a uno o m&aacute;s clientes, a partir de una Lista de Cuentas.\n\n### Query Parameters válidos en esta versión de la API\n\n| Query Param | Tipo de Dato | Descripci&oacute;n |\n|-------------|--------------|-------------|\n| accountId   | array        | Listado de Cuentas separado por comas |\n\n### Usos válidos de Query Parameters\n\n| Resultado esperado | Path Param | Query Parameters requeridos | Query Parameters opcionales | Query Param Extrafields |\n|--------------------|------------|-----------------------------|-----------------------------|-------------------------|\n| La Lista de Cuentas | no | accountId | - | - |\n\n### Informaci&oacute;n complementaria\nNo aplica\n\n### Data de Prueba\n    \n    N&uacute;mero de cuenta de dep&oacute;sito\n    \n### Precondiciones para el consumo de esta versión de la API\n\nPara poder consumir el API, el canal deber&aacute; registrar los siguientes formatos:\n\n### 1. Formato FCI\n\nCrear el c&oacute;digo Mirror Transaction TINH. Si el canal tiene asociado un CICS, deber&aacute;n utilizarlo para inscribir el Mirror Transaction, caso contrario, los CICS a considerar para la creaci&oacute;n del c&oacute;digo son:\n\n    Desarrollo:     A35*CICS \n\n    Certificación:  A37*CICS \n\n    Producción:     A32*CICS\n\n### 2. Formato FAE\n\nRegistrar en Rutinas Generales el c&oacute;digo de la aplicaci&oacute;n de 2 d&iacute;gitos que consumir&aacute; la interfaz TIEL.\n\n### 3. Formato ZConnect:\n\nPara mayor informaci&oacute;n por favor revisar el link ***\"[Requisitos del consumo de interfaces ZConnect](https://confluence.lima.bcp.com.pe/display/ZCEEPUB/5.+Requisito+Consumo+de+interfaces+ZCEE)\"***\n\n### Usos v&aacute;lidos de Query Parameters\n\nNo aplica.\n\n### Variantes válidas del Payload (Cuerpo del mensaje)\n\nNo aplica.\n\n### Lista de Valores usadas en esta versión de la API\n\nA continuaci&oacute;n se listan aquellos campos que tienen m&aacute;s de un valor posible.\n\n| Atributo | Valores permitidos |\n\n|----------|--------------------|\n\n    family.code             004 = CUENTA CORRIENTE\n                            005 = CUENTA DE AHORROS\n                            007 = CUENTA MAESTRA\n                            008 = CERTIFICADO BANCARIO\n                            006 = CUENTA A PLAZO\n                            009 = CUENTA CTS\n\n### Códigos de error usados en esta versión de la API\n\n| Código | HTTP Status | Descripción |\n\n|--------|-------------|-------------|\n\n| TL0003 | 400 | Los datos proporcionados no son validos. |\n\n| TL0004 | 500 | El servicio no se encuentra disponible. Por favor reintente mas tarde. |\n\n| TL0005 | 500 | No se encontro el servidor solicitado. |\n\n| TL0006 | 501 | Los datos proporcionados no cumplen con los criterios para ser procesado. |\n\n| TL0007 | 500 | Ocurrio un error en el servicio externo. |\n\n| TL0009 | 503 | Ocurrio un error intentando invocar servicios externos. Por favor reintente nuevamente. |\n\n| TL0011 | 401 | No esta autorizado correctamente para ejecutar esta operacion. |\n\n| TL9999 | 500 | Ocurrio un error inesperado. Por favor contactarse con el Soporte Tecnico. |\n",
+        "operationId" : "searchListUsingGET",
+        "x-atlas-header" : {
+          "$ref" : "#/components/schemas/AccountListHeaders"
+        },
+        "parameters" : [ {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/Authorization"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/Request-ID"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/request-date"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/app-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/caller-name"
+        }, {
+          "name" : "Ocp-Apim-Subscription-Key",
+          "required" : true,
+          "in" : "header",
+          "description" : "Clave de suscripción",
+          "schema" : {
+            "maxLength" : 32,
+            "minLength" : 32,
+            "type" : "string",
+            "example" : "3cfdad6e03c24d0ab7112dce75cdba35"
+          }
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/app-name"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/user-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/opn-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/supervisor-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/server-terminal"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/server-app"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/parameters/opn-reverse-number"
+        }, {
+          "name" : "org-code",
+          "required" : true,
+          "in" : "header",
+          "description" : "Identificador de la institución a la que pertenece el componente solicitante</br> 1 -> Perú</br> 3 -> Bolivia\n",
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^(1|3)$",
+            "example" : "1"
+          }
+        }, {
+          "name" : "opn-number",
+          "required" : true,
+          "in" : "header",
+          "description" : "Número de operación en el canal",
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^\\d{8}$",
+            "example" : "00073380"
+          }
+        }, {
+          "name" : "branch-office-code",
+          "required" : true,
+          "in" : "header",
+          "description" : "Sucursal a la cual pertenece el canal donde se originó la operación",
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^\\d{3}$",
+            "example" : "310"
+          }
+        }, {
+          "name" : "agency-code",
+          "required" : true,
+          "in" : "header",
+          "description" : "Agencia a la cual pertenece el canal donde se originó la operación",
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^\\d{3}$",
+            "example" : "077"
+          }
+        }, {
+          "name" : "guild-client",
+          "in" : "header",
+          "description" : "Indica si el aplicativo proveedor permite la consulta/operación sobre cuentas tipo Gremio",
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^(S|N)$",
+            "example" : "S"
+          }
+        }, {
+          "name" : "special-account",
+          "in" : "header",
+          "description" : "Indica si el aplicativo proveedor permite la consulta/operación sobre cuentas especiales",
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^(S|N)$",
+            "example" : "S"
+          }
+        }, {
+          "name" : "auth-server",
+          "in" : "header",
+          "description" : "Servidor de Autorización que provee los token JWT",
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^(CA|CAS)$",
+            "example" : "CA"
+          }
+        }, {
+          "name" : "cache-control",
+          "in" : "header",
+          "description" : "Header que especifica las políticas de almacenamiento en caché",
+          "schema" : {
+            "type" : "string",
+            "example" : "no-cache"
+          }
+        }, {
+          "name" : "accountId",
+          "in" : "query",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "description" : "Listado de Cuentas separado por comas"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Se validó la información correctamente.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountSearchListResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "El cliente envi&oacute; datos incorrectos.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "No se encontr&oacute; el recurso solicitado.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Error al intentar actualizar el recurso.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "El servicio no se encontra disponible.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{accountId}/transactions" : {
+      "get" : {
+        "tags" : [ "Account" ],
+        "summary" : "Listado de las transacciones de una cuenta.",
+        "description" : "### Acerca de la funcionalidad expuesta\n\n La funcionalidad permite buscar las transacciones de una cuenta.\n ### Data de Prueba\n Desarollo:\n\n| accountId            |\n|----------------------|\n| 00001910680905026004 |\n| 00001910045468071004 |\n| 00019100001008018005 |\n| 00024505044679061005 |\n| 00001918002545207006 |\n| 00002158500301615006 |\n| 00001918012882109006 |\n| 00001910000001010007 |\n| 00001910087212110008 |\n| 00019140000001014009 |\n ### Precondiciones para el consumo de esta versión de la API\n  Para poder consumir el API, el canal deber&aacute; registrar los siguientes formatos:\n  ### 1. Configuraci&oacute;n por &Uacute;NICA VEZ POR C&Oacute;DIGO DE CANAL\n 1.1. Solicitar agregar el rol invoque ZCEE al usuario de aplicaci&oacute;n consumidor en RACF, este rol permite al usuario poder consumir interfaces ZCEE. El Rol se asigna al usuario dependiendo del ambiente.\n\n - Desarrollo -> GZCINVDS\n - Certificación -> GZCINVCR\n - Producción -> GZCINVPR\n\n Nota. El usuario de aplicaci&oacute;n de Certificaci&oacute;n debe de tener permisos para consumir interfaces ZOSCEE en Desarrollo, esto por restricciones de RACF Desarrollo/Certificaci&oacute;n.\n\n Ejemplos de solicitud:\n\n - Otorgar Rol invoque (GZCINVDS, GZCINVCR) interfaces ZCEE de Desarrollo y Certificaci&oacute;n al usuario de aplicaci&oacute;n RACF de Mobile Banking   APMBCER.\n\n - Otorgar Rol invoque (GZCINVDS) interfaces ZCEE de Desarrollo a usuario de aplicaci&oacute;n RACF de Mobile Banking APMBDES\n\n 1.2. Solicitar delegar la identidad del usuario de aplicaci&oacute;n consumidor entre el Distribuido (campo AppCode de JWT) y Mainframe (Usuario aplicaci&oacute;n RACF) a trav&eacute;s de comando RACMAP.\n\n| Ejecutar Comando|\n|----------------|\n| racmap id(APXXYYY) map userdidfilter(name(?XX')) REGISTRY(NAME('*')) WITHLABEL(?Nombre Consumidor?)|\n|SETROPTS RACLIST(IDIDMAP) REFRESH|\n Donde: \n\n - XX: C&oacute;digo de aplicaci&oacute;n (2) del consumidor\n - YYY: Ambiente (DES/CER/PRO)\n\n|Ejemplo|\n|--------|\n|racmap id(APBMCER) map userdidfilter(name('BM')) REGISTRY(NAME('*')) WITHLABEL('Banca Movil?)|\n|SETROPTS RACLIST(IDIDMAP) REFRESH|\n\n ### 2. Formato FAE\n Registrar en Rutinas Generales el c&oacute;digo de la aplicaci&oacute;n de 2 d&iacute;gitos que consumir&aacute; la interfaz STDA, IMDO.\n ### 3. Formato FCI\n ### STDA\n Crear el c&oacute;digo Mirror Transaction XY0O, donde XY es el c&oacute;digo de la aplicaci&oacute;n consumidora de 2 d&iacute;gitos.\n\n CICS AOR - Validar con equipo owner plataforma ZCEE\n\n - Desarrollo -> AZ5*CICS\n - Certificación -> AZ7*CICS\n - Producción -> AZ2*CICS\n\n CICS TOR\n\n - Desarrollo -> A054CICS\n - Certificación -> A073CICS / A074CICS\n - Producción -> A02WCICS / A02XCICS / A02YCICS / A02ZCICS\n\n\n ### IMDO\n Crear el c&oacute;digo Mirror Transaction XY3Z, donde XY es el c&oacute;digo de la aplicaci&oacute;n consumidora de 2 d&iacute;gitos.\n\n CICS AOR - Validar con equipo owner plataforma ZCEE\n\n - Desarrollo -> A55*CICS\n - Certificación -> A57*CICS\n - Producción -> A52*CICS\n\n CICS TOR\n\n - Desarrollo -> A054CICS\n - Certificación -> A073CICS / A074CICS\n - Producción -> A02WCICS / A02XCICS / A02YCICS / A02ZCICS\n\n ### Creaci&oacute;n y permisos MirrorTX\n\n ### 3.1. Protecci&oacute;n de Transacciones (Responsable: Seguridad de aplicaciones)\n\n Todo mirror transaction creado debe de estar protegido en los ambientes de   Certificaci&oacute;n y Producci&oacute;n. Esto se define en un formato FCI a trav&eacute;s de un ticket de cambio (MVP o RLM).\n\n Usar FCI como referencia ZCEE -> **https://jira.lima.bcp.com.pe/browse/MVPBCP-4437** \n\n ### 3.2. Creaci&oacute;n de Transacciones (Responsable: IBM MAINFRAME SERVER)\n\n Se debe de definir las transacciones en los CICS TOR(Terminal) y en los CIS AOR (Canal o Core).\n\n Usar FCI como referencia ZCEE -> **https://jira.lima.bcp.com.pe/browse/MVPBCP-4437** \n\n ### 3.3. Otorgar permisos sobre las Transacciones (Responsable: Seguridad de aplicaciones)\n\n Se debe de solicitar permisos de READ al usuario de aplicaci&oacute;n RACF consumidor sobre las transacciones creadas en el FCI. Los permisos solo se solicitan en Certificaci&oacute;n y Producci&oacute;n\n\n Usar MVP como referencia -> **https://jira.lima.bcp.com.pe/browse/MVPBCP-4437** \n\n ### 4. Configuraci&oacute;n de Atlas Security\n| Backend | M&eacute;todo | URI |\n|----|-----|-----|\n| STDA |POST| /syst/stda/v1.0.0|\n| IMDO |POST| /syst/imdo/v1.0.0|\n| API |GET| /loans-deposits/account/v4/accounts/{accountId}/transactions|\n\n Para mayor información t&eacute;cnica\n\n **https://confluence.lima.bcp.com.pe/x/ZtoQIQ** \n ### Path Parameters válidos en esta versión de la API\n| Param     | Tipo de Dato | Descripción       | Valores Permitidos |\n |-----------------|--------------|-------------------|--------------------|\n|accountId        | string       | identificador de cuenta. La estructura de un accountId(20 dígitos de longitud, el cual se conforma por el número de cuenta de 13 o 14 dígitos donde estos son SUC-XXXXXXXX-MM-DD (SUC = numero de sucursal, XXXXXXXX = numero de cta, MM = Moneda, DD = digito verificador) (rellenado de ceros por la izquierda) y el código de familia de 3 dígitos concatenado al final. | 00019100109502007005 |\n  ### Query Params v&aacute;lidos en esta versi&oacute;n de la API\n| Param     | Tipo de Dato | Descripción       | Valores Permitidos |\n |-----------------|--------------|-------------------|--------------------|\n|transactionType  | string       | operación cargo o abono  | C, A |\n |limit         | integer      | cantidad de elementos | Desde 1 a 250 |\n |offset         | integer      | indicador de paginación | Desde 0 |\n |fromTransactionDate  | string   | fecha de inicio de la búsqueda | Formato (YYYY-MM-DD)|\n |toTransactionDate  | string   | fecha de fin de la búsqueda | Formato (YYYY-MM-DD) |\n\n ### Usos válidos de Query Parameters\n| Resultado esperado | Path Param   | Query Parameters requeridos | Query Parameters Opcionales | Query Parameters extrafields |\n |----------|------------------|-----------------|-------------|-------------|\n | Consulta de los 20 últimos movimientos | accountId |   limit, offset   |   transactionType   | -   |\n\n| Consulta de los movimientos del día | accountId | limit, offset, fromTransactionDate, toTransactionDate | transactionType| - |\n\n| Consulta de los movimientos históricos | accountId | limit, offset, fromTransactionDate, toTransactionDate | transactionType |  - |\n\n| Consulta orquestada de movimientos | accountId | limit, offset, fromTransactionDate, toTransactionDate | transactionType |  - |\n\n ### Consideraciones relacionadas al uso de los tipos de consulta indicados en la sección previa\n| Tipo de consulta | Familia de Cuenta   | Descripción |\n |----------|------------------|-----------------|\n | Consulta de los 20 últimos movimientos | Corriente |  Solo se debe enviar el queryparam limit = 20 y offset = 0. Opcionalmente se puede utilizar el queryparam transactionType. |\n\n| Consulta de los 20 últimos movimientos | Ahorro |  Solo se debe enviar el queryparam limit = 20 y offset = 0. Opcionalmente se puede utilizar el queryparam transactionType. |\n\n| Consulta de los movimientos del día | Corriente |  Se debe enviar el queryparam fromTransactionDate = Fecha Actual y toTransactionDate = Fecha Actual, además de los queryparams limit y offset según corresponda el caso. Opcionalmente se puede utilizar el queryparam transactionType. |\n\n| Consulta de los movimientos del día | Ahorro | Se debe enviar el queryparam fromTransactionDate = Fecha Actual y toTransactionDate = Fecha Actual, además de los queryparams limit y offset según corresponda el caso. Actualmente, el tipo de consulta no se encuentra soportada por el api. |\n\n| Consulta de los movimientos históricos | Todas |  Se debe enviar el queryparam fromTransactionDate y toTransactionDate con una valor menor al día actual. Adicionalmente el valor máx. que puede tomar el queryparam toTransactionDate es (Día Actual - 1)|\n\n| Consulta orquestada de movimientos | Corriente |  Se debe enviar el queryparam fromTransactionDate con una fecha menor al día actual y el queryparam toTransactionDate con la fecha actual. Opcionalmente se puede utilizar el queryparam transactionType. Internamente en la consulta se está orquestando la petición de los movimientos del día con los movimientos históricos.|\n\n| Consulta orquestada de movimientos | Ahorro |  Se debe enviar el queryparam fromTransactionDate con una fecha menor al día actual y el queryparam toTransactionDate con la fecha actual. Opcionalmente se puede utilizar el queryparam transactionType. Internamente en la petición solo se está consultando los movimientos históricos, considerándose como rango de búsqueda el queryparam fromTransactionDate y el (toTransactionDate -1).|\n\n ### Consideraciones relacionadas a las limitaciones técnicas\n| Consideración | Tipo de consulta | Familia de Cuenta   | Descripción | Ejemplo |\n |----------|---------|----------|-----------------|-----------------|\n | Limitación de data en Alexandría | Consulta orquestada de movimientos | Corriente | Debido a la periodicidad de la ejecución del proceso batch que sincroniza la información de Systematics hacia Alexandria, el cual se ejecuta a las 9:00 pm (sin considerar días feriados), puede existir la posibilidad de no retornar todos los movimientos de una cuenta de acuerdo sea el rango de fechas utilizado en la consulta. | Si un cliente realiza movimientos a partir de las 9:00 pm el día 10/08/2022, estos no figuraran en Alexandría hasta que el proceso batch se ejecute el 11/08/2022 a las 9:00 pm. Por ende, cuando se ejecute la consulta orquestada de movimientos el día 11/08/2022 a las 4:00pm, con fechas del 10/08/2022 al 11/08/2022, se perderá información en la respuesta del api.  |\n| Limitación de data en Systematics | Consulta orquestada de movimientos | Ahorro | Debido a que no existe un componente que permita retornar los movimientos del día para una cuenta de tipo ahorro, no es posible ejecutar la consulta orquestada de movimientos. Por lo cual, cuando se utilice esta funcionalidad, internamente el api solo consultará los movimientos históricos a Alexandría, utilizando como rango de búsqueda el fromTransactionDate y el toTransactionDate - 1| Si un cliente ejecuta la consulta orquestada de movimientos para una cuenta de tipo ahorro con fechas desde 01/01/2022 hasta el 10/08/2022, internamente el api solo consultará los movimientos históricos a Alexandría con las fechas desde 01/01/2022 hasta el 09/08/2022.|\n\n ### Variantes válidas del Payload (Cuerpo del mensaje)\n No aplica\n ### Lista de Valores usadas en esta versión de la API\n No aplica\n ### Códigos de error usados en esta versión de la API\n| Código | HTTP Status | Código Detalle Error | Descripción  |\n |--------|---------|--------|-----------------------------------------------|\n\n| TL0003 | 400 | 101 | El parámetro accountId ingresado no es válido. |\n | TL0003 | 400 | 102 | El parámetro transactionType ingresado no es válido.   |\n | TL0003 | 400 | 103 | El parámetro fromTransactionDate ingresado no es válido.   |\n | TL0003 | 400 | 104 | El parámetro toTransactionDate ingresado no es válido.   |\n | TL0003 | 400 | 105 | El parámetro limit ingresado no es válido.   |\n | TL0003 | 400 | 106 | El parámetro offset ingresado no es válido.   |\n | TL0003 | 400 | 107 | El rango de fechas ingresado no es válido.   |\n | TL0003 | 400 | 108 | La petición enviada contiene valores no permitidos.  |\n | TL0003 | 400 | 109 | La consulta solicitada no es válida.  |\n | TL9999 | 404 | SH0503 | Ocurrió un error inesperado.  |\n | TL9999 | 404 | Y10503 | Ocurrió un error inesperado.  |\n | TL0004 | 503 |    -   | El servicio no se encuentra disponible. Por favor reintente m&aacute;s tarde. |\n| TL0011 | 401 |    -   | No esta autorizado correctamente para ejecutar esta operaci&oacute;n.         |\n| TL0011 | 403 |    -   | No tiene los permisos necesarios para ejecutar esta operaci&oacute;n.         |\n | TL9999 | 500 |    -   | Ocurri&oacute; un error inesperado. Por favor contactarse con Soporte T&eacute;cnico.|",
+        "operationId" : "searchTransaction",
+        "x-atlas-header" : {
+          "$ref" : "#/components/schemas/AccountTransactionHeaders"
+        },
+        "x-atlas-query" : {
+          "$ref" : "#/components/schemas/AccountTransactionGetByIdQuery"
+        },
+        "parameters" : [ {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Authorization"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Request-ID"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/request-date"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/app-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/caller-name"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Ocp-Apim-Subscription-Key"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/user-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/supervisor-code"
+        }, {
+          "$ref" : "#/components/parameters/org-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/server-terminal"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/server-app"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/branch-office-code"
+        }, {
+          "name" : "agency-code",
+          "in" : "header",
+          "description" : "Codigo de la agencia (Ej. 001)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\d{3}",
+            "type" : "string",
+            "example" : "001"
+          }
+        }, {
+          "name" : "app-name",
+          "in" : "header",
+          "description" : "Nombre descriptivo de la aplicacion. (Ej. BM)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^[a-zA-Z0-9]+$",
+            "type" : "string",
+            "maxLength" : 15,
+            "example" : "BM"
+          }
+        }, {
+          "name" : "opn-code",
+          "in" : "header",
+          "description" : "Identificador de la operacion de negocio, esta ligado al usuario. (Ej. 12345678)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\d+",
+            "type" : "string",
+            "maxLength" : 50,
+            "example" : "12345678"
+          }
+        }, {
+          "name" : "opn-number",
+          "in" : "header",
+          "description" : "Numero de Operacion: Identificador que representa una operacion. Este dato es generado por canal y consta de 8 digitos. (Ej. 12345678)",
+          "required" : true,
+          "schema" : {
+            "pattern" : "\\d+",
+            "type" : "string",
+            "maxLength" : 8,
+            "example" : "12345678"
+          }
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/opn-reverse-number"
+        }, {
+          "name" : "authserver",
+          "in" : "header",
+          "description" : "Indica el Tipo de Token que envía el Servicio Api Management (Ej. XXX).",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "Cache-Control",
+          "in" : "header",
+          "description" : "Cache enviada desde el canal (Ej. XXX).",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "example" : "no-cache, no-store, must-revalidate"
+          }
+        }, {
+          "name" : "enabled-employee-data-query",
+          "in" : "header",
+          "description" : "Indica si el canal puede realizar consulta de cuentas de empleados. S = S&iacute;, N = No  (Ej. XXX).",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^([SN])$",
+            "type" : "string",
+            "example" : "N"
+          }
+        }, {
+          "name" : "enabled-special-account-query",
+          "in" : "header",
+          "description" : "Indica si el canal puede realizar consulta de cuentas especiales. S = S&iacute;, N = No  (Ej. XXX).",
+          "required" : true,
+          "schema" : {
+            "pattern" : "^([SN])$",
+            "type" : "string",
+            "example" : "N"
+          }
+        }, {
+          "name" : "accountId",
+          "in" : "path",
+          "description" : "Numero de producto (cuenta) a consultar (Ej. XXX).",
+          "required" : true,
+          "schema" : {
+            "maxLength" : 20,
+            "minLength" : 20,
+            "pattern" : "\\d+",
+            "type" : "string"
+          },
+          "example" : 1.9100109502007004E16
+        }, {
+          "name" : "items-cursor",
+          "in" : "header",
+          "description" : "Clave para manejar el paginado enviado por host (clave-in/clave-out)",
+          "required" : false,
+          "schema" : {
+            "pattern" : "\\d",
+            "type" : "string",
+            "maxLength" : 11,
+            "example" : "-0000000001"
+          }
+        }, {
+          "name" : "items-pending",
+          "in" : "header",
+          "description" : "identificador si existe movimientos pendientes a consultar (1:true, 0:false) ",
+          "required" : false,
+          "schema" : {
+            "type" : "integer",
+            "example" : "1"
+          }
+        }, {
+          "name" : "totalRecords",
+          "in" : "header",
+          "description" : "Cantidad de elementos del arreglo",
+          "required" : false,
+          "schema" : {
+            "pattern" : "\\d",
+            "type" : "string",
+            "maxLength" : 11,
+            "example" : "354"
+          }
+        }, {
+          "name" : "transactionType",
+          "in" : "query",
+          "description" : "operación cargo o abono",
+          "required" : false,
+          "explode" : true,
+          "schema" : {
+            "type" : "string",
+            "pattern" : "^(A|C)$",
+            "example" : "A"
+          }
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Cantidad máxima de registros devueltos",
+          "required" : true,
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "example" : 20
+          }
+        }, {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "cantidad de registros que fueron exonerados en la búsqueda",
+          "required" : true,
+          "explode" : true,
+          "schema" : {
+            "type" : "integer",
+            "example" : 20
+          }
+        }, {
+          "name" : "fromTransactionDate",
+          "in" : "query",
+          "description" : "Fecha de inicio asociada al filtro de búsqueda para listar las transacciones.",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 10,
+            "minLength" : 0,
+            "pattern" : "^\\d{4}-\\d{2}-\\d{2}$|^$",
+            "example" : "2017-08-10"
+          }
+        }, {
+          "name" : "toTransactionDate",
+          "in" : "query",
+          "description" : "Fecha de fin asociada al filtro de búsqueda para listar las transacciones.",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "maxLength" : 10,
+            "minLength" : 0,
+            "pattern" : "^\\d{4}-\\d{2}-\\d{2}$|^$",
+            "example" : "2017-08-10"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Se ejecut&oacute; satisfactoriamente.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountTransactionResponse"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "No se encontraron movimientos."
+          },
+          "400" : {
+            "description" : "Los datos proporcionados no son v&aacute;lidos.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "No est&aacute; autorizado para consumir el API.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "No se tiene permisos para consumir el API.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Ocurri&oacute; un error inesperado. Por favor contactarse con Soporte T&eacute;cnico.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          },
+          "503" : {
+            "description" : "El servicio no se encuentra disponible. Por favor reintente m&aacute;s tarde.",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/affiliate" : {
+      "post" : {
+        "tags" : [ "Account" ],
+        "summary" : "Afilia o desafilia la cuenta corriente o ahorros por el numero de telefono celular del cliente.",
+        "operationId" : "accountPhoneAffiliationPost",
+        "description" : "### Acerca de la funcionalidad expuesta\n\nAfilia o desafilia la cuenta corriente o ahorros con el numero de telefono celular del cliente.\n\n### Precondiciones para el consumo de esta versión de la API\n\n### Data de Prueba\n\n### Query Parameters v&aacute;lidos en esta versi&oacute;n de la API\n\nNo Aplica\n\n### Usos válidos de Query Parameters\n\n### Variantes válidas del Payload (Cuerpo del mensaje)\n\n### Lista de Valores usadas en esta versión de la API\n\n### Códigos de error usados en esta versión de la API\n",
+        "parameters" : [ {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Authorization"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Request-ID"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/request-date"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/app-code"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/caller-name"
+        }, {
+          "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/parameters/Ocp-Apim-Subscription-Key"
+        } ],
+        "requestBody" : {
+          "description" : "Entrada del Servicio",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AccountAffiliateRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Exito"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            },
+            "description" : "El cliente envió datos incorrectos."
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Atlas-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            },
+            "description" : "Acceso Denegado."
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            },
+            "description" : "No se encontr&oacute; el recurso solicitado en la b&uacute;squeda."
+          },
+          "409" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            },
+            "description" : "No se puede afiliar/ desafiliar la cuenta debido a que el Cliente no tiene asociado en nuero telefonico ."
+          },
+          "500" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            },
+            "description" : "Error al realizar la b&uacute;squeda de datos."
+          },
+          "503" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/Api-Header-Domain/1.0.0#/components/schemas/ApiException"
+                }
+              }
+            },
+            "description" : "Ocurrio un error intentando invocar servicios externos. Por favor contactarse con Soporte T&eacute;cnico."
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "parameters" : {
+      "org-code" : {
+        "name" : "org-code",
+        "in" : "header",
+        "description" : "Codigo de la organizacion (1: BCP) (Ej. 1).",
+        "required" : true,
+        "schema" : {
+          "pattern" : "\\d",
+          "type" : "string",
+          "maxLength" : 1,
+          "example" : "1"
+        }
+      }
+    },
+    "schemas" : {
+      "AccountHeaders" : {
+        "type" : "object"
+      },
+      "AccountAffiliateRequest" : {
+        "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Dev/domain-account-v4/4.3.2#/components/schemas/AccountAffiliateRequest"
+      },
+      "AccountSearchResponse" : {
+        "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Org/domain-account-v4/4.1.0#/components/schemas/AccountSearchResponse"
+      },
+      "AccountListHeaders" : {
+        "type" : "object"
+      },
+      "AccountSearchListResponse" : {
+        "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Dev/domain-account-v4/4.2.0#/components/schemas/AccountSearchListResponse"
+      },
+      "AccountTransactionHeaders" : {
+        "type" : "object"
+      },
+      "AccountTransactionGetByIdQuery" : {
+        "type" : "object"
+      },
+      "AccountTransactionResponse" : {
+        "type" : "object",
+        "description" : "Lista de Movimientos de la cuenta",
+        "properties" : {
+          "metadata" : {
+            "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Dev/domain-account-v4/4.3.1#/components/schemas/Metadata"
+          },
+          "transactions" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "https://swaggerhub.lima.bcp.com.pe/v1/domains/BCP_Dev/domain-account-v4/4.3.1#/components/schemas/Transaction"
+            }
+          }
+        }
+      }
+    }
+  }
+}
